@@ -30,10 +30,7 @@ instalar(){
 
 }
 
-install(){
-	# Program name 
-	PROGRAM="$1"
-
+installfun(){
 	# Check if the program is installed
 	if ! command -v "$PROGRAM" &> /dev/null; then
 		clear
@@ -50,11 +47,13 @@ install(){
    	 	if command -v "$PROGRAM" &> /dev/null; then
 			echo "-----------------------------------"
    	 		echo -e "\033[32m$PROGRAM was installed succesfully\033[0m."
-			sleep 2
+			sleep 3
 			clear
    	 	else
    	 		echo "There was a problem installing $PROGRAM."
-   	 		return 1
+   	 		sleep 3
+			clear
+			return 1
    		fi
 	return 0
 	fi

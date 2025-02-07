@@ -1,11 +1,7 @@
 #!/bin/bash
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-
-source "${DIR}/config/config.env"
-source "${DIR}/data/tables/Tablas.sh"
-source "${DIR}/lib/config.sh"
-source "${DIR}/lib/install.sh"
+source "${DIR}/load_sources.sh"
 
 #Funcion Saludo
 saludo(){
@@ -118,199 +114,6 @@ analisis_log(){
 	sleep 3
 	echo ""
 	echo ""
-}
-
-#Funcion ataque diccionario
-diccionario(){
-	clear
-	#Especificar diccionario que se va a  utilizar
-	read -p "Especifica diccionario: " diccionario
-	#Especificar contraseña Hashseada
-	read -p "Introduce el hash: " hash
-	#Identificar Hash
-
-	while true; do
-		read -p "¿Necesitas identificar el hash?(y/n)" identifier
-        	if [[ "$identifier" == "si" ]] || [[ "$identifier" == "yes" ]] || [[ "$identifier" == "s" ]] || [[ "$identifier" == "y" ]]; then
-			while true;do
-				echo -e "\033[36m═════════════════════════\033[0m"
-				echo -e "\033[36m☰☰☰☰☰☰\033[37mIdentificador\033[36m☰☰☰☰☰☰\033[0m"
-				echo -e "\033[36m⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯\033[0m"
-				echo -e "\033[34m1. \033[32mhash-identifier\033[0m"
-				echo -e "\033[34m2. \033[32mhashid\033[0m"
-				echo -e "\033[36m⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯\033[0m"
-				read -p "¿Que programa quieres usar?: " identifier
-				#Identificar con Has-identifier
-				if [ "$identifier" -eq "1" ]; then
-
-					#̣̣̣̣̣⨪-----------------------------------------
-					# Llamar a verificar_e_instalar con un programa específico
-					instalacion=hash-identifier
-					instalar "$instalacion"
-					if [ $? -eq 1 ]; then
-					echo "Error crítico: No se pudo instalar '$instalacion'. Abortando..."
-					return 1
-					fi
-					#---------------------------------------------
-
-					hash-identifier "$hash"
-					break
-				#Identificar con Hasid
-				elif [ "$identifier" -eq "2" ]; then
-			
-					#̣̣̣̣̣⨪-----------------------------------------
-					# Llamar a verificar_e_instalar con un programa específico
-					instalacion=hashid
-					instalar "$instalacion"
-					if [ $? -eq 1 ]; then
-					echo "Error crítico: No se pudo instalar '$instalacion'. Abortando..."
-					return 1
-					fi
-					#---------------------------------------------
-
-					hashid "$hash"
-					break
-
-				else
-					understand
-				fi
-        	        done
-			break
-
-		elif [[ "$identifier" == "no" ]] || [[ "$identifier" == "n" ]]; then
-                	break        	
-		else
-                	understand
-		fi
-	done
-       
-
-	#Selecionar Programa para Deshashsear la contraseña
-	while true; do
-		echo -e "\033[36m═════════════════════════\033[0m"
-		echo -e "\033[36m☰☰☰☰☰☰☰☰☰Programa☰☰☰☰☰☰☰☰\033[0m"
-		echo -e "\033[36m⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯\033[0m"
-		echo -e "\033[34m1. \033[32mJohn the ripper\033[0m"
-		echo -e "\033[34m2. \033[32mHashcat\033[0m"
-		echo -e "\033[36m⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯\033[0m"
-		read -p "¿Que programa quieres usas?: " john
-		if [ "$john" -eq "1" ]; then
-			jonhf $hash $diccionario
-			break2. hashid
-
-
-		elif [ "$john" -eq "2" ]; then
-			hashcatf $hash $diccionario
-			break
-
-		else
-			understand
-		fi
-	done
-}
-#Funcion ataque diccionario con John the reaper
-jonhf(){
-
-	#̣̣̣̣̣⨪-----------------------------------------
-	# Llamar a verificar_e_instalar con un programa específico
-	instalacion=john
-	instalar "$instalacion"
-	if [ $? -eq 1 ]; then
-		echo "Error crítico: No se pudo instalar '$instalacion'. Abortando..."
-		return 1
-	fi
-	#---------------------------------------------
-
-	clear
-	#Mostar algoritmos disponibles para John
-	while true;do
-		read -p "¿Quieres ver la lisata de algoritmos de John? (y/n)" lista_john
-		if [[ "$lista_john" == "si" ]] || [[ "$lista_john" == "yes" ]] || [[ "$lista_john" == "s" ]] || [[ "$lista_john" == "y" ]]; then
-			john_lista
-			break
-		elif [[ "lista_john" == "no" ]] || [[ "$lista_john" == n ]]; then
-			break
-		else
-			understand
-		fi
-	done
-	#Especificar algoritmo
-	read -p "¿Que algoritmo quieres usar?: " formato
-	#Cerea archivo temporal
-	echo $1 > hash.txt
-	#Llamada a jhon
-	john --wordlist=$2 --format=$formato hash.txt
-	echo "⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯"
-	john --show hash.txt
-	echo "⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯"
-	#Borrar el archivo temporal
-	rm hash.txt
-	sleep 5
-}
-
-#Funcion atque diccionario hashcat
-hashcatf(){
-
-	#̣̣̣̣̣⨪-----------------------------------------
-	# Llamar a verificar_e_instalar con un programa específico
-	instalacion=hashcat
-	instalar "$instalacion"
-	if [ $? -eq 1 ]; then
-		echo "Error crítico: No se pudo instalar '$instalacion'. Abortando..."
-		return 1
-	fi
-	#---------------------------------------------
-
-	clear
-	#Mostrar tablas de Hascat
-	while true; do
-		read -p "¿Quires ver la lista de algoritmos de hashcat? (y/n)" lista_hashcat
-	        if [[ "$lista_hashcat" == "si" ]] || [[ "$lista_hashcat" == "yes" ]] || [[ "$lista_hashcat" == "s" ]] || [[ "$lista_hashcat" == "y" ]]; then
-			while true; do
-				echo -e "\033[36m═════════════════════════\033[0m"
-				echo -e "\033[36m☰☰☰☰☰☰☰☰☰☰\033[37mTabla\033[36m☰☰☰☰☰☰☰☰☰☰\033[0m"
-				echo -e "\033[36m⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯\033[0m"
-				echo -e "\033[34m1. \033[32mCompleta\033[0m"
-				echo -e "\033[34m2. \033[32mReducida\033[0m"
-				echo -e "\033[36m⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯\033[0m"
-				read -p "Elige una opción: " tabla
-					#Tabla completa
-					if [ "$tabla" -eq "1" ]; then
-						tabla_extensa
-						break
-
-					#Tabla con resumida
-					elif [ "$tabla" -eq "2" ]; then
-						tabla_resumida
-						break
-
-					else
-						understand
-					fi
-			done
-
-			break
-
-        	elif [[ "$lista_hashcat" == "no" ]] || [[ "$lista_hashcat" == "n" ]]; then
-                	break
-
-        	else
-                	understand
-        	fi
-	done
-
-	#Comando hashcat
-	read -p "introduce el id del algoritmo que quieres utilizar: " algoritmo
-	#Crea archivo temporal
-	echo $1 > hash.txt
-	#Llama a Hashcat
-	hashcat -m $algoritmo -a 0 hash.txt $2
-	echo "⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯"
-	hashcat -m $algoritmo -a 0 hash.txt $2 --show
-	echo "⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯"
-	#Borrar temporal
-	rm hash.txt
-	sleep 5
 }
 
 #Funcion Fingerprinting
@@ -771,12 +574,11 @@ while true; do
 	echo -e "\033[36m⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯\033[0m"
 	echo -e "\033[34m1. \033[32mSaludar\033[0m"
 	echo -e "\033[34m2. \033[32mAnálisis de logs\033[0m"
-	echo -e "\033[34m3. \033[32mAtaque de diccionario\033[0m"
+	echo -e "\033[34m3. \033[32mBrute-force\033[0m"
 	echo -e "\033[34m4. \033[32mFingerprinting\033[0m"
 	echo -e "\033[34m5. \033[32mFootprinting\033[0m"
 	echo -e "\033[34m6. \033[32mFuzzing\033[0m"
-	echo -e "\033[34m7. \033[31;9mAtaque con metasploit\033[0m"
-	echo -e "\033[34m8. \033[32mWordlist config\033[0m"
+	echo -e "\033[34m7. \033[32mWordlist config\033[0m"
 	echo -e "\033[34m0. \033[32mExit\033[0m"
 	echo -e "\033[36m⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯⌯\033[0m"
 	read -p "Elige una opción: " menu
@@ -788,7 +590,7 @@ while true; do
 		logs
 
 	elif [ "$menu" -eq "3" ]; then
-		diccionario
+		bruteattack
 
 	elif [ "$menu" -eq "4" ]; then
 		fingerprinting
@@ -798,9 +600,6 @@ while true; do
 
 	elif [ "$menu" -eq "6" ]; then
 		fuzzing
-
-	elif [ "$menu" -eq "7" ]; then
-		metasploit
 
 	elif [ "$menu" -eq "8" ]; then
 		wordlist_conf
