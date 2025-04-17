@@ -601,7 +601,7 @@ while true; do
 	elif [ "$menu" -eq "6" ]; then
 		fuzzing
 
-	elif [ "$menu" -eq "8" ]; then
+	elif [ "$menu" -eq "7" ]; then
 		wordlist_conf
 
 	elif [ "$menu" -eq "0" ]; then
